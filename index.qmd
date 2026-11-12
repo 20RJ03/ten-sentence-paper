@@ -1,0 +1,71 @@
+---
+title: "Bigger Flippers, Bigger Penguins?"
+subtitle: "A Ten-Sentence Paper"
+author: RJ Malik
+date: today
+abstract: "Using the Palmer Penguins data, this paper tests whether flipper length is correlated with body mass across three Antarctic penguin species."
+format:
+  html:
+    toc: true
+execute:
+  echo: true
+jupyter: python3
+---
+
+## Introduction
+
+Flipper length is one of the easiest measurements to take on a penguin, while body mass requires wrangling a reluctant bird onto a scale. This paper asks whether flipper length is correlated with body mass, and therefore whether the easy measurement could stand in for the hard one.
+
+## Literature Review
+
+The (entirely fictional) Antarctic Society of Flipper Enthusiasts has argued since 1911 that "a penguin is only as heavy as its wings are long," a claim supported mostly by vigorous nodding at conferences. Their rivals, the Order of the Round Penguin, insist that body mass depends on lunch rather than limbs, and neither group has ever brought data to settle the dispute.
+
+## Method
+
+```{python}
+import pandas as pd
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+from scipy import stats
+
+df = sns.load_dataset("penguins").dropna()
+
+n = len(df)
+n_species = df["species"].nunique()
+mean_flipper = df["flipper_length_mm"].mean()
+mean_mass = df["body_mass_g"].mean()
+```
+
+The sample includes `{python} f"{n}"` penguins from `{python} f"{n_species}"` species, with a mean flipper length of `{python} f"{mean_flipper:.1f}"` mm and a mean body mass of `{python} f"{mean_mass:,.0f}"` g. A Pearson correlation tests the null hypothesis that flipper length and body mass are unrelated (ρ = 0) against the alternative that they are correlated (ρ ≠ 0).
+
+## Results
+
+```{python}
+corr_matrix = df.corr(numeric_only=True)
+
+r = corr_matrix.loc["flipper_length_mm", "body_mass_g"]
+
+r_check, pval = stats.pearsonr(df["flipper_length_mm"], df["body_mass_g"])
+degf = n - 2
+r_sq_pct = r**2 * 100
+
+p_text = "p < .001" if pval < 0.001 else f"p = {pval:.3f}"
+
+corr_matrix.round(2)
+```
+
+```{python}
+#| label: fig-scatter
+#| fig-cap: "Flipper length and body mass by species."
+sns.scatterplot(data=df, x="flipper_length_mm", y="body_mass_g", hue="species")
+plt.xlabel("Flipper length (mm)")
+plt.ylabel("Body mass (g)")
+plt.show()
+```
+
+Flipper length and body mass were significantly and positively correlated, r(`{python} f"{degf}"`) = `{python} f"{r:.2f}"`, `{python} p_text`. Flipper length alone accounts for about `{python} f"{r_sq_pct:.0f}"`% of the variation in body mass (see @fig-scatter).
+
+## Discussion
+
+These results reject the null hypothesis and suggest that flipper length is a strong, practical stand-in for body mass when weighing a penguin is not possible. Because the data are observational and pool three species of different sizes, future research should test whether the relationship holds within each species and whether sex or island explain some of the remaining variation.
