@@ -1,0 +1,51 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Bigger Flippers, Bigger Penguins?",
+    "section": "",
+    "text": "Flipper length is one of the easiest measurements to take on a penguin, while body mass requires wrangling a reluctant bird onto a scale. This paper asks whether flipper length is correlated with body mass, and therefore whether the easy measurement could stand in for the hard one."
+  },
+  {
+    "objectID": "index.html#introduction",
+    "href": "index.html#introduction",
+    "title": "Bigger Flippers, Bigger Penguins?",
+    "section": "",
+    "text": "Flipper length is one of the easiest measurements to take on a penguin, while body mass requires wrangling a reluctant bird onto a scale. This paper asks whether flipper length is correlated with body mass, and therefore whether the easy measurement could stand in for the hard one."
+  },
+  {
+    "objectID": "index.html#literature-review",
+    "href": "index.html#literature-review",
+    "title": "Bigger Flippers, Bigger Penguins?",
+    "section": "Literature Review",
+    "text": "Literature Review\nThe (entirely fictional) Antarctic Society of Flipper Enthusiasts has argued since 1911 that “a penguin is only as heavy as its wings are long,” a claim supported mostly by vigorous nodding at conferences. Their rivals, the Order of the Round Penguin, insist that body mass depends on lunch rather than limbs, and neither group has ever brought data to settle the dispute."
+  },
+  {
+    "objectID": "index.html#method",
+    "href": "index.html#method",
+    "title": "Bigger Flippers, Bigger Penguins?",
+    "section": "Method",
+    "text": "Method\n\nimport pandas as pd\nimport numpy as np\nimport seaborn as sns\nimport matplotlib.pyplot as plt\nfrom scipy import stats\n\ndf = sns.load_dataset(\"penguins\").dropna()\n\nn = len(df)\nn_species = df[\"species\"].nunique()\nmean_flipper = df[\"flipper_length_mm\"].mean()\nmean_mass = df[\"body_mass_g\"].mean()\n\nThe sample includes 333 penguins from 3 species, with a mean flipper length of 201.0 mm and a mean body mass of 4,207 g. A Pearson correlation tests the null hypothesis that flipper length and body mass are unrelated (ρ = 0) against the alternative that they are correlated (ρ ≠ 0)."
+  },
+  {
+    "objectID": "index.html#results",
+    "href": "index.html#results",
+    "title": "Bigger Flippers, Bigger Penguins?",
+    "section": "Results",
+    "text": "Results\n\ncorr_matrix = df.corr(numeric_only=True)\n\nr = corr_matrix.loc[\"flipper_length_mm\", \"body_mass_g\"]\n\nr_check, pval = stats.pearsonr(df[\"flipper_length_mm\"], df[\"body_mass_g\"])\ndegf = n - 2\nr_sq_pct = r**2 * 100\n\np_text = \"p &lt; .001\" if pval &lt; 0.001 else f\"p = {pval:.3f}\"\n\ncorr_matrix.round(2)\n\n\n\n\n\n\n\n\nbill_length_mm\nbill_depth_mm\nflipper_length_mm\nbody_mass_g\n\n\n\n\nbill_length_mm\n1.00\n-0.23\n0.65\n0.59\n\n\nbill_depth_mm\n-0.23\n1.00\n-0.58\n-0.47\n\n\nflipper_length_mm\n0.65\n-0.58\n1.00\n0.87\n\n\nbody_mass_g\n0.59\n-0.47\n0.87\n1.00\n\n\n\n\n\n\n\n\nsns.scatterplot(data=df, x=\"flipper_length_mm\", y=\"body_mass_g\", hue=\"species\")\nplt.xlabel(\"Flipper length (mm)\")\nplt.ylabel(\"Body mass (g)\")\nplt.show()\n\n\n\n\n\n\n\nFigure 1: Flipper length and body mass by species.\n\n\n\n\n\nFlipper length and body mass were significantly and positively correlated, r(331) = 0.87, p &lt; .001. Flipper length alone accounts for about 76% of the variation in body mass (see Figure 1)."
+  },
+  {
+    "objectID": "index.html#discussion",
+    "href": "index.html#discussion",
+    "title": "Bigger Flippers, Bigger Penguins?",
+    "section": "Discussion",
+    "text": "Discussion\nThese results reject the null hypothesis and suggest that flipper length is a strong, practical stand-in for body mass when weighing a penguin is not possible. Because the data are observational and pool three species of different sizes, future research should test whether the relationship holds within each species and whether sex or island explain some of the remaining variation."
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "About this site"
+  }
+]
